@@ -16,13 +16,13 @@ test.describe('Cart Prime', ()=>{
         await expect(page.locator('#button-cart')).toBeEnabled();
        });
 
-       test('P-03 | Add to Cart button adds product to cart', async({page})=>{
+       test('P-03 | Add to Cart → success alert is shown', async({page})=>{
         await page.locator('#button-cart').click();
         await expect(page.locator('.alert-success')).toBeVisible();
        });
 
        
-       test('P4 — add single product → cart badge shows 1 item', async({page})=>{
+       test('P-04 | Add single product → cart badge shows 1 item', async({page})=>{
         
             await test.step('Open Product page and add 1 item', async()=>{
                 await page.goto(APP_ROUTES.iphoneProduct);
@@ -45,7 +45,7 @@ test.describe('Cart Prime', ()=>{
        });
 
 
-       test('P5 — add two different products → both appear, total is correct', async({page})=>{
+       test('P-05 | Add two products → both appear in cart and checkout total is correct', async({page})=>{
 
             await test.step('Add Product 1', async() => {
                 await page.goto(APP_ROUTES.iphoneProduct);
@@ -93,20 +93,10 @@ test.describe('Cart Prime', ()=>{
 
             });
 
-
-
-            
-
-
-
-
-
        });
 
        
     });
 
 
-
-   
 });

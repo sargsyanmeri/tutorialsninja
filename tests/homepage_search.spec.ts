@@ -1,15 +1,137 @@
-import {expect, test, Page} from '@playwright/test';
-import {APP_ROUTES} from './app_routes';
+
+import {expect, test} from '@playwright/test';
+import {APP_ROUTES} from './test-data/app_routes';
+
+const EXISTING_PRODUCT = 'iPhone';
+const UNKNOWN_PRODUCT = 'product-404';
+
+test.describe('Search Prime', ()=>{
+
+    test.describe('Positive scenarios', ()=>{
+
+        test.beforeEach(async({page})=>{
+            await page.goto(APP_ROUTES.home);
+        });
+
+        test('P-01 | Header search input is visible', async({page})=>{
+            await expect(page.getByPlaceholder('Search'), 'Search Field not found').toBeVisible();
+        });
+
+        test('P-02 | Header search button is visible and enabled', async({page})=>{
+            await expect(page.locator('#search').getByRole('button'), 'Search button not found').toBeVisible();
+            await expect(page.locator('#search').getByRole('button'), 'Search button not found').toBeEnabled();
+        });
+
+        test('P-03 | Click search button → results page opens for iPhone', async({page})=>{
+            await page.locator('#search').getByPlaceholder('Search').fill(EXISTING_PRODUCT);
+            await page.locator('#search').getByRole('button').click();
+
+            await expect(page, 'Invalid URL').toHaveURL(new RegExp(`route=product/search&search=${EXISTING_PRODUCT}`));
+            await expect(page.locator('#input-search')).toHaveValue(EXISTING_PRODUCT);
+
+            await expect(page.locator('#product-search h1')).toContainText(EXISTING_PRODUCT);
+        });
+        
+        test('P-04 | Search for iPhone → product cards are shown',  async({page})=>{
+            await page.locator('#search').getByPlaceholder('Search').fill(EXISTING_PRODUCT);
+            await page.locator('#search').getByRole('button').click();
+
+            await expect(page, 'Invalid URL').toHaveURL(new RegExp(`route=product/search&search=${EXISTING_PRODUCT}`));
 
 
-test.describe('',()=>{
+            expect(await page.locator('.product-thumb h4').count()).toBeGreaterThan(0);
+            await expect(page.locator('.product-thumb h4').first()).toContainText(EXISTING_PRODUCT);
 
-    test.beforeEach(async({page})=>{
-            await page.goto(APP_ROUTES.home); // HTML, CSS
-            await expect(page.locator("#menu")).toBeVisible();
-    
-    })
+            const products = await page.locator('.product-thumb h4').allTextContents(); // ['Super Ipone' 'Iphone 16', 'Iphone 15 PRo Max'];
+            
+            for(let product of products){
+                expect(product).toContain(EXISTING_PRODUCT);
+            }
+            
+        });
 
 
-    
+        test('P-05 | Press Enter in search field → results page opens for iPhone', async({page})=>{
+            await page.locator('#search').getByPlaceholder('Search').fill(EXISTING_PRODUCT);
+            await page.locator('#search').getByPlaceholder('Search').press('Enter');
+
+            
+            await expect(page, 'Invalid URL').toHaveURL(new RegExp(`route=product/search&search=${EXISTING_PRODUCT}`));
+            await expect(page.locator('#input-search')).toHaveValue(EXISTING_PRODUCT);
+
+            await expect(page.locator('#product-search h1')).toContainText(EXISTING_PRODUCT);
+        });
+
+
+        test('P-06 | Search results page has category filter', async({page})=>{
+            await expect(page.locator('select[name="category_id"]')).toBeVisible();
+        });
+
+    });
+
+    test.describe('Negative scenarios', ()=>{
+        test.beforeEach(async({page})=>{
+            await page.goto(APP_ROUTES.home);
+        });
+
+        test('N-01 | Empty search → "no results" message is shown', async({page})=>{
+            await page.locator('#search').getByPlaceholder('Search').fill('');
+            await page.locator('#search').getByRole('button').click();
+
+            await expect( page.getByText('There is no product that matches the search criteria.') ).toBeVisible();
+        });
+
+
+        test('N-02 | Empty search → no product cards are shown', async({page})=>{
+            await page.locator('#search').getByPlaceholder('Search').fill('');
+            await page.locator('#search').getByRole('button').click();
+
+
+             expect(await page.locator('.product-thumb h4').count()).toBe(0);
+        });
+
+
+        test('N-03 | Unknown product search shows no results message', async({page})=>{
+            await page.locator('#search').getByPlaceholder('Search').fill(UNKNOWN_PRODUCT);
+            await page.locator('#search').getByRole('button').click();
+
+            await expect( page.getByText('There is no product that matches the search criteria.') ).toBeVisible();
+        });
+
+        test('N-04 | Search for unknown product → no product cards are shown', async({page})=>{
+            await page.locator('#search').getByPlaceholder('Search').fill(UNKNOWN_PRODUCT);
+            await page.locator('#search').getByRole('button').click();
+
+            expect(await page.locator('.product-thumb h4').count()).toBe(0);
+        });
+
+
+        test('N-05 | iPhone search results contain only iPhone products', async({page})=>{
+            await page.locator('#search').getByPlaceholder('Search').fill(EXISTING_PRODUCT);
+            await page.locator('#search').getByRole('button').click();
+
+            await expect(page, 'Invalid URL').toHaveURL(new RegExp(`route=product/search&search=${EXISTING_PRODUCT}`));
+
+
+           const products =  await page.locator('.product-thumb h4').allTextContents();
+
+           for(let product of products){
+                expect(product).toContain(EXISTING_PRODUCT);
+           }
+
+        });
+
+
+        test('N-06 | XSS search value does not open browser alert', async({page})=>{
+            
+        });
+
+
+        test('N-07 | XSS search value does not render script tag', async({page})=>{
+            
+        });
+
+    });
+
 });
+

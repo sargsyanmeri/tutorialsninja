@@ -16,20 +16,20 @@ test.describe('Homepage Menu - Positive scenarios', ()=>{
         await expect(page.locator('#menu > div > ul > li')).toHaveCount(8);
     });
 
-    test('P-03 | Hover on Desktops shows dropdown', async({page})=>{
+    test('P-03 | Hover on Desktops → dropdown becomes visible', async({page})=>{
         await page.locator('#menu').getByRole('link', {name: 'Desktops'}).hover();
         await expect( page.locator('#menu .dropdown .dropdown-menu').first() ).toBeVisible();
     });
 
-    test('P-04 | Click on Tablets opens Tablets category page', async({page})=>{
+    test('P-04 | Click Tablets → Tablets category page opens', async({page})=>{
         await page.locator('#menu').getByRole('link', {name: 'Tablets'}).click();
         await expect(page).toHaveURL(/category&path=57/);
         await expect(page.locator('#content h2')).toContainText('Tablets');
     });
 
-    test('P-05 | Click on Cameras opens Cameras category page', async({page})=>{});
+    test('P-05 | Click Cameras → Cameras category page opens', async({page})=>{});
 
-    test('P-06 | Menu stays visible after category navigation', async({page})=>{
+    test('P-06 | Menu remains visible after navigating to a category', async({page})=>{
          await page.locator('#menu').getByRole('link', {name: 'Software'}).click();
          await expect(page.locator('#menu')).toBeVisible();
     });
@@ -45,7 +45,7 @@ test.describe('Homepage Menu - Negative scenarios', ()=>{
         await expect(page.locator("#menu")).toBeVisible();
     });
 
-    test('N-01 | Menu does not contain fake item Gaming', async({page})=>{
+    test('N-01 | Menu does not contain non-existent item "Gaming', async({page})=>{
         await expect(page.locator('#menu').getByRole('link', {name: 'Gaming'})).not.toBeVisible();
     });
 
@@ -53,13 +53,13 @@ test.describe('Homepage Menu - Negative scenarios', ()=>{
         await expect(page.locator('#menu .dropdown .dropdown-menu').first()).toBeHidden();
     });
 
-    test('N-03 | Invalid category URL does not break menu', async({page})=>{
+    test('N-03 | Invalid category URL does not break the menu', async({page})=>{
         await page.goto(APP_ROUTES.invalidCategory);
         await expect(page.locator('#menu')).toBeVisible();
     });
 
     // <a href="https://ok.ru/"> OK </a>
-    test('N-04 | Menu links do not use target blank', async({page})=>{
+    test('N-04 | Menu links do not open in a new tab', async({page})=>{
         const menuLinks = page.locator('#menu a');
         const count = await menuLinks.count(); // 20
 
@@ -73,17 +73,17 @@ test.describe('Homepage Menu - Negative scenarios', ()=>{
     });
 
     // XSS - Cross-Site Scripting
-    test('N-05 | XSS query in URL does not hide menu', async({page})=>{
+    test('N-05 | XSS query in URL does not hide the menu', async({page})=>{
         await page.goto(APP_ROUTES.xssSearch);
         await expect(page.locator('#menu')).toBeVisible();
     });
 
 
-    test('N-06 | Menu does not have a ninth top-level item ', async({page})=>{
+    test('N-06 | Menu has no more than 8 top-level items ', async({page})=>{
          await expect(page.locator('#menu > div > ul > li').nth(8)).not.toBeVisible(); 
     });
 
-    test(' N-07 | Laptops dropdown is hidden before hover ', async({page})=>{
+    test('N-07 | Laptops dropdown is hidden before hover', async({page})=>{
         await expect(page.locator('#menu .dropdown .dropdown-menu').nth(1)).toBeHidden();
     })
 
