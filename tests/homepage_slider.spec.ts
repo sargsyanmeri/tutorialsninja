@@ -45,8 +45,6 @@ test.describe('Homepage Slider - Positive scenarios', ()=>{
         await expect(targetBullet).toBeVisible();
     });
 
-
-
    test('P-06 | First slider shows one active image', async({page})=>{
        const firstSlider = page.locator('.swiper-viewport').first();
        await expect(firstSlider.locator('.swiper-slide-active img')).toBeVisible();
