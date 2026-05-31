@@ -27,14 +27,23 @@ test.describe('Homepage Menu - Positive scenarios', ()=>{
         await expect(page.locator('#content h2')).toContainText('Tablets');
     });
 
-    test('P-05 | Click Cameras → Cameras category page opens', async({page})=>{});
+    test('P-05 | Click Cameras → Cameras category page opens', async({page})=>{
+        await page.locator('#menu').getByRole('link', { name: 'Cameras', exact: true }).click();
+        await expect(page).toHaveURL(/path=33/);
+         await expect(page.locator('h2')).toContainText('Cameras');
+    });
 
     test('P-06 | Menu remains visible after navigating to a category', async({page})=>{
          await page.locator('#menu').getByRole('link', {name: 'Software'}).click();
          await expect(page.locator('#menu')).toBeVisible();
     });
 
-    test('P-07 | Desktops dropdown contains PC and Mac links', async({page})=>{});
+    test('P-07 | Desktops dropdown contains PC and Mac links', async({page})=>{
+        await page.locator('#menu').getByRole('link', { name: 'Desktops' }).hover();
+        const dropdown = page.locator('#menu .dropdown .dropdown-menu').first();
+        await expect(dropdown.getByRole('link', { name: 'PC' })).toBeVisible();
+        await expect(dropdown.getByRole('link', { name: 'Mac' })).toBeVisible();
+    });
 
 });
 
