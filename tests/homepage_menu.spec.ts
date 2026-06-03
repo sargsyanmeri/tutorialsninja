@@ -30,7 +30,7 @@ test.describe('Homepage Menu - Positive scenarios', ()=>{
     test('P-05 | Click Cameras → Cameras category page opens', async({page})=>{
         await page.locator('#menu').getByRole('link', { name: 'Cameras', exact: true }).click();
         await expect(page).toHaveURL(/path=33/);
-         await expect(page.locator('h2')).toContainText('Cameras');
+        await expect(page.locator('h2')).toContainText('Cameras');
     });
 
     test('P-06 | Menu remains visible after navigating to a category', async({page})=>{
@@ -94,8 +94,6 @@ test.describe('Homepage Menu - Negative scenarios', ()=>{
 
     test('N-07 | Laptops dropdown is hidden before hover', async({page})=>{
         await expect(page.locator('#menu .dropdown .dropdown-menu').nth(1)).toBeHidden();
-    })
-
-
+    });
 
 });

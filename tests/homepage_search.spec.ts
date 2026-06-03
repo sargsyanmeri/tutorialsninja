@@ -1,6 +1,6 @@
 
 import {expect, test} from '@playwright/test';
-import {APP_ROUTES} from './test-data/app_routes';
+import {APP_ROUTES} from './app_routes';
 
 const EXISTING_PRODUCT = 'iPhone';
 const UNKNOWN_PRODUCT = 'product-404';
@@ -86,10 +86,8 @@ test.describe('Search Prime', ()=>{
             await page.locator('#search').getByPlaceholder('Search').fill('');
             await page.locator('#search').getByRole('button').click();
 
-
-             expect(await page.locator('.product-thumb h4').count()).toBe(0);
+            expect(await page.locator('.product-thumb h4').count()).toBe(0);
         });
-
 
         test('N-03 | Unknown product search shows no results message', async({page})=>{
             await page.locator('#search').getByPlaceholder('Search').fill(UNKNOWN_PRODUCT);
@@ -104,7 +102,6 @@ test.describe('Search Prime', ()=>{
 
             expect(await page.locator('.product-thumb h4').count()).toBe(0);
         });
-
 
         test('N-05 | iPhone search results contain only iPhone products', async({page})=>{
             await page.locator('#search').getByPlaceholder('Search').fill(EXISTING_PRODUCT);
@@ -121,14 +118,12 @@ test.describe('Search Prime', ()=>{
 
         });
 
-
-        test('N-06 | XSS search value does not open browser alert', async({page})=>{
-            
-        });
-
-
-        test('N-07 | XSS search value does not render script tag', async({page})=>{
-            
+        test('N-06 | XSS search value does not render script tag', async ({ page }) => {
+            await page.locator('#search').getByPlaceholder('Search').fill('<script>alert("XSS")</script>');
+            await page.locator('#search').getByRole('button').click();
+        
+            const pageContent = await page.content();
+            expect(pageContent).not.toContain('<script>alert("XSS")</script>');
         });
 
     });
