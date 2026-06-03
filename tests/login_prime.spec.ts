@@ -59,8 +59,6 @@ test.describe('Login Prime', ()=>{
 
         test('P-06 | My Account page displays all expected sections after login', async({page})=>{
             await login(page, VALID_USER_CREDENTIALS);
-
-            // ??????????
         });
 
         test('P-07 | Valid login followed by logout redirects to logout confirmation page', async({page})=>{
@@ -129,8 +127,6 @@ test.describe('Login Prime', ()=>{
             await expect(page).toHaveURL(APP_ROUTES.login);
         });
 
-
     });
- 
 
 });
