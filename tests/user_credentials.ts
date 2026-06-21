@@ -6,8 +6,8 @@ export interface LoginCredentials {
 };
 
 export const VALID_USER_CREDENTIALS: LoginCredentials  = {
-    email: 'haykbaleyan1@gmail.com',
-    password: 'qazwsx1234!@#$'
+    email: 'testerid223@gmail.com',
+    password: '1122334455??M'
 };
 
 export const INVALID_USER_CREDENTIALS: LoginCredentials = {
@@ -16,11 +16,12 @@ export const INVALID_USER_CREDENTIALS: LoginCredentials = {
 };
 
 export const INVALID_EMAIL_CREDENTIALS: LoginCredentials = {
-    email: 'haykabelyangmail.com',
-    password: 'qazwsx1234!@#$'
+    email: 'teierid223@gmail.com',
+    password: '1122334455??M'
 };
 
 export const INVALID_PASSWORD_CREDENTIALS: LoginCredentials = {
-    email: 'haykbaleyan1@gmail.com',
+    email: 'testerid223@gmail.com',
     password: 'asdadadsa@#$we!@#$'
 };
+

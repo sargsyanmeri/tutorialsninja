@@ -3,13 +3,24 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test": "playwright test",
+    "test:search": "playwright test --grep @search",
+    "test:slider": "playwright test --grep @slider",
+    "test:menu": "playwright test --grep @menu",
+    "test:currency": "playwright test --grep @currency",
+    "test:cart": "playwright test --grep @cart",
+    "test:login": "playwright test --grep @login",
+    "test:positive": "playwright test --grep @positive",
+    "test:negative": "playwright test --grep @negative",
+    "test:security": "playwright test --grep @security"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
-    "@playwright/test": "^1.59.1",
+    "@playwright/test": "^1.60.0",
     "@types/node": "^25.6.0"
   }
 }

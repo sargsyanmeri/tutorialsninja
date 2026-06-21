@@ -15,9 +15,9 @@ async function login(page: Page, credentials: LoginCredentials) {
 }
 
 
-test.describe('Login Prime', ()=>{
+test.describe('Login Prime', { tag: '@login' }, ()=>{
 
-    test.describe('Positive scenarios', ()=>{
+    test.describe('Positive scenarios', { tag: '@positive' }, ()=>{
 
         test.beforeEach(async({page})=>{
             await page.goto(APP_ROUTES.login);
@@ -70,7 +70,7 @@ test.describe('Login Prime', ()=>{
 
     });
 
-    test.describe('Negative scenarios', ()=>{
+    test.describe('Negative scenarios', { tag: '@negative' }, ()=>{
 
 
         test.beforeEach(async({page})=>{

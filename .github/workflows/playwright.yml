@@ -1,0 +1,66 @@
+name: Playwright Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Playwright tag to filter tests'
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - '@search'
+          - '@slider'
+          - '@menu'
+          - '@currency'
+          - '@cart'
+          - '@login'
+          - '@positive'
+          - '@negative'
+          - '@security'
+
+jobs:
+  test:
+    name: Run tests (${{ github.event_name == 'workflow_dispatch' && inputs.tag || 'all' }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Playwright tests
+        env:
+          CI: true
+        run: |
+          TAG="${{ github.event_name == 'workflow_dispatch' && inputs.tag != 'all' && inputs.tag || '' }}"
+          if [ -n "$TAG" ]; then
+            npx playwright test --grep "$TAG" --project=chromium
+          else
+            npx playwright test --project=chromium
+          fi
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report-${{ github.run_id }}
+          path: playwright-report/
+          retention-days: 30

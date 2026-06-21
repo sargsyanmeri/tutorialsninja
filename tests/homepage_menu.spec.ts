@@ -1,10 +1,10 @@
 import {expect, test, Page} from '@playwright/test';
 import {APP_ROUTES} from './app_routes';
 
-test.describe('Homepage Menu - Positive scenarios', ()=>{
+test.describe('Homepage Menu - Positive scenarios', { tag: ['@menu', '@positive'] }, ()=>{
 
     test.beforeEach(async({page})=>{
-        await page.goto(APP_ROUTES.home); // HTML, CSS
+        await page.goto(APP_ROUTES.home);
         await expect(page.locator("#menu")).toBeVisible();
     });
 
@@ -47,14 +47,14 @@ test.describe('Homepage Menu - Positive scenarios', ()=>{
 
 });
 
-test.describe('Homepage Menu - Negative scenarios', ()=>{
+test.describe('Homepage Menu - Negative scenarios', { tag: ['@menu', '@negative'] }, ()=>{
 
      test.beforeEach(async({page})=>{
-        await page.goto(APP_ROUTES.home); // HTML, CSS
+        await page.goto(APP_ROUTES.home);
         await expect(page.locator("#menu")).toBeVisible();
     });
 
-    test('N-01 | Menu does not contain non-existent item "Gaming', async({page})=>{
+    test('N-01 | Menu does not contain non-existent item "Gaming"', async({page})=>{
         await expect(page.locator('#menu').getByRole('link', {name: 'Gaming'})).not.toBeVisible();
     });
 
@@ -67,29 +67,25 @@ test.describe('Homepage Menu - Negative scenarios', ()=>{
         await expect(page.locator('#menu')).toBeVisible();
     });
 
-    // <a href="https://ok.ru/"> OK </a>
     test('N-04 | Menu links do not open in a new tab', async({page})=>{
         const menuLinks = page.locator('#menu a');
-        const count = await menuLinks.count(); // 20
+        const count = await menuLinks.count();
 
         for(let i=0; i<count; i++){
             const target = await menuLinks.nth(i).getAttribute('target');
-            
-            expect(target).not.toBe('_blank');
-            // expect(target !== '_blank').toBeTruthy();
-            expect(target === null).toBeTruthy();
+            expect(target).toBeNull();
         }
     });
 
     // XSS - Cross-Site Scripting
-    test('N-05 | XSS query in URL does not hide the menu', async({page})=>{
+    test('N-05 | XSS query in URL does not hide the menu', { tag: '@security' }, async({page})=>{
         await page.goto(APP_ROUTES.xssSearch);
         await expect(page.locator('#menu')).toBeVisible();
     });
 
 
     test('N-06 | Menu has no more than 8 top-level items ', async({page})=>{
-         await expect(page.locator('#menu > div > ul > li').nth(8)).not.toBeVisible(); 
+         await expect(page.locator('#menu > div > ul > li').nth(8)).not.toBeVisible();
     });
 
     test('N-07 | Laptops dropdown is hidden before hover', async({page})=>{

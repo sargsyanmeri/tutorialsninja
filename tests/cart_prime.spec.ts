@@ -1,9 +1,9 @@
 import {expect, test} from '@playwright/test';
 import {APP_ROUTES} from './app_routes';
 
-test.describe('Cart Prime', ()=>{
+test.describe('Cart Prime', { tag: '@cart' }, ()=>{
 
-    test.describe('Positive scenarios', ()=>{
+    test.describe('Positive scenarios', { tag: '@positive' }, ()=>{
         test.beforeEach(async({page})=>{
             await page.goto(APP_ROUTES.iphoneProduct);
         });

@@ -7,6 +7,7 @@ export const APP_ROUTES = {
         wishlist: 'https://tutorialsninja.com/demo/index.php?route=account/wishlist',
         iphoneProduct: 'https://tutorialsninja.com/demo/index.php?route=product/product&product_id=40',
         macbookProduct: 'https://tutorialsninja.com/demo/index.php?route=product/product&product_id=43',
-        checkout: 'https://tutorialsninja.com/demo/index.php?route=checkout/cart'
+        checkout: 'https://tutorialsninja.com/demo/index.php?route=checkout/cart',
+        currency: 'https://tutorialsninja.com/demo/index.php?route=common/currency/currency',
     };
     
