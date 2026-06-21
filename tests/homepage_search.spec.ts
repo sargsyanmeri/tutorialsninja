@@ -63,7 +63,11 @@ test.describe('Search Prime', { tag: '@search' }, ()=>{
 
 
         test('P-06 | Search results page has category filter', async({page})=>{
-            await expect(page.locator('select[name="category_id"]')).toBeVisible();
+            await page.locator('#search').getByPlaceholder('Search').fill(EXISTING_PRODUCT);
+            await page.locator('#search').getByRole('button').click();
+
+            await expect(page, 'Invalid URL').toHaveURL(new RegExp(`route=product/search&search=${EXISTING_PRODUCT}`));
+            await expect(page.locator('select[name="category_id"]'), 'Category filter not found').toBeVisible();
         });
 
     });

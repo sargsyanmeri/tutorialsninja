@@ -12,6 +12,12 @@ async function selectCurrency(page: Page, code: string) {
     await page.locator(`button.currency-select[name="${code}"]`).click();
 }
 
+function getMacbookProductCard(page: Page) {
+    return page.locator('.product-thumb').filter({
+        has: page.getByRole('link', { name: 'MacBook', exact: true }),
+    });
+}
+
 test.describe('Currency Prime', { tag: '@currency' }, ()=>{
 
     test.describe('Positive scenarios', { tag: '@positive' }, ()=>{
@@ -65,8 +71,7 @@ test.describe('Currency Prime', { tag: '@currency' }, ()=>{
         });
 
         test('N-01 | Switch currency with items already in cart', async({page})=>{
-            // Exact match avoids accidentally hitting "MacBook Air" / "MacBook Pro" too
-            const macbookCard = page.locator('.product-thumb').filter({hasText: /^MacBook$/});
+            const macbookCard = getMacbookProductCard(page);
 
             await test.step('Set USD and add MacBook to cart', async()=>{
                 await selectCurrency(page, 'USD');
@@ -95,7 +100,7 @@ test.describe('Currency Prime', { tag: '@currency' }, ()=>{
         });
 
         test('N-02 | Switch currency, then add to cart', async({page})=>{
-            const macbookCard = page.locator('.product-thumb').filter({hasText: /^MacBook$/});
+            const macbookCard = getMacbookProductCard(page);
 
             await test.step('Switch to EUR before adding to cart', async()=>{
                 await selectCurrency(page, 'EUR');

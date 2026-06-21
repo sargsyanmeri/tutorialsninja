@@ -23,16 +23,15 @@ test.describe('Cart Prime', { tag: '@cart' }, ()=>{
 
        
        test('P-04 | Add single product → cart badge shows 1 item', async({page})=>{
-        
-            await test.step('Open Product page and add 1 item', async()=>{
-            await page.goto(APP_ROUTES.iphoneProduct);
+
+            await test.step('Add 1 item to cart', async()=>{
             await page.locator('#input-quantity').fill('1');
             await page.locator('#button-cart').click();
             await expect(page.locator('.alert-success')).toBeVisible();
             });
 
             await test.step('Check cart badge quantity', async()=>{
-            await expect(page.locator('#cart-total')).toContainText('2 item');
+            await expect(page.locator('#cart-total')).toContainText('1 item');
             });
 
 
